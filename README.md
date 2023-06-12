@@ -1,8 +1,8 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+这是一个[Next.js](https://nextjs.org/)项目，可以用[`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app)生成项目。
+主要功能是：用于将json渲染成页面，包含页面的动作action，组件之间的联动linkage。
+## 使用说明
 
-## Getting Started
-
-First, run the development server:
+1. 启动应用：
 
 ```bash
 npm run dev
@@ -11,31 +11,88 @@ yarn dev
 # or
 pnpm dev
 ```
+2. 组件引用说明：
+```bash
+import { useState, useEffect } from 'react';
+import Form from 'react-form-validates';
+import Head from 'next/head'
+import components from '../utils/components'
+import actions from '../utils/actions'
+import { Json2Html, registerAction, registerComponent } from '../utils/core';
+import data from '../examples/dynamicLinkage.json'
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+const createForm = Form.create;
+const FormItem = Form.Item;
+export default createForm()(function DynamicLinkage(props) {
+  const [renderData, setRenderData] = useState(null); // 待渲染的数据，由后端返回
+  
+  const { form } = props
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+  // 注册页面私有的action
+  useEffect(() => {
+    registerAction({
+      onSubmit: (d) => {
+        console.log('json数据：', d);
+        const val = form.getFieldsValue();
+        console.log('表单数据：', val);
+      },
+    });
+  }, []);
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+  useEffect(() => {
+    // 注册公共动作actions
+    registerAction(actions)
+    // 注册公共组件components
+    registerComponent(components)
+  }, [])
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+  useEffect(() => {
+    // json数据由后端保存，这边用timeout模拟请求数据
+    const timer = setTimeout(() => {
+      setRenderData(data)
+    }, 100)
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+    return () => {
+      clearTimeout(timer)
+    }
+  }, [])
 
-## Learn More
+  // 非表单页面，可不传globalData
+  const globalData = {
+    form, // 解析器core.js使用, 公共action内部如需获取表单状态，也可以使用。
+    FormItem, // 解析器core.js使用
+    events: { // form组件绑定事件，onChange, onBlur等
+      onChange: (k, el) => {
+        console.log('表单变化的key:', k);
+        console.log('表单变化的value:', el.target.value);
+      }
+    }
+  }
 
-To learn more about Next.js, take a look at the following resources:
+  return (
+    <Json2Html jsonObj={renderData} globalData={globalData}></Json2Html>
+  )
+})
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+3. json数据结构字段说明：
+```bash
+{
+  // 常规属性
+  widget: String, // 用于作组件映射
+  jChildren: Array | Object, // 用于渲染子组件
+  jProps: Object, // 子组件属性透传
+  action: Array | Object, // 用于给组件绑定onClick事件
+  
+  // 表单属性
+  needFormItem: true, // 固定配置，表示当前组件为表单组件
+  rules: Array, // 表单规则
+  linkage: String, // 联动脚本，返回Object会以属性方式传入子组件；返回空则隐藏子组件。
+  validateTrigger： String, // 当前组件校验时机，onChange | onBlur 等
+}
+```
 
-## Deploy on Vercel
+## 表单组件
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
-
-# json2html-react
-用于将json渲染成页面，包含页面的动作action，组件之间的联动linkage。
+目前案例强依赖于组件库：react-form-validates，大家可按需选择。
