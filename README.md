@@ -84,6 +84,10 @@ export default createForm()(function DynamicLinkage(props) {
   jChildren: Array | Object, // 用于渲染子组件
   jProps: Object, // 子组件属性透传
   action: Array | Object, // 用于给组件绑定onClick事件
+    {
+      type: String, // 用于action映射
+      data: Any, // 作为传入action数据
+    }
   
   // 表单属性
   needFormItem: true, // 固定配置，表示当前组件为表单组件
@@ -95,4 +99,4 @@ export default createForm()(function DynamicLinkage(props) {
 
 ## 表单组件
 
-目前案例强依赖于组件库：react-form-validates，大家可按需选择。
+目前测试用例强依赖于组件库：react-form-validates，大家可按需选择。
