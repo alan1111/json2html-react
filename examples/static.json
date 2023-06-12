@@ -1,0 +1,27 @@
+{
+  "widget": "custom-div",
+  "jChildren": [
+    {
+      "widget": "button",
+      "jProps": {
+        "theme": "primary"
+      },
+      "jChildren": {
+        "widget": "custom-div",
+        "jProps": {
+          "label": "我是自定义组件，传了props"
+        }
+      }
+    },
+    {
+      "widget": "button",
+      "jProps": {},
+      "jChildren": {
+        "widget": "custom-div",
+        "jProps": {
+          "label": "我没有传props"
+        }
+      }
+    }
+  ]
+}

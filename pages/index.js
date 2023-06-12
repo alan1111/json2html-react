@@ -1,7 +1,14 @@
 import Head from 'next/head'
-import styles from '@/styles/Home.module.css'
+import { Radio, List } from 'zarm'
 
+const routeMap = ['static', 'staticAction', 'dynamic', 'dynamicLinkage'];
 export default function Home() {
+
+  const onChange = (value) => {
+    console.log('onChange', value);
+    window.location.href = routeMap[value] || ''
+  };
+
   return (
     <>
       <Head>
@@ -10,8 +17,17 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.jpeg" />
       </Head>
-      <main className={styles.main}>
-        test
+      <main>
+        <List>
+          <List.Item title="查看模版：">
+            <Radio.Group type="button" onChange={onChange}>
+              <Radio value="0">静态页面渲染</Radio>
+              <Radio value="1">静态页面渲染 + action</Radio>
+              <Radio value="2">动态页面渲染</Radio>
+              <Radio value="3">动态页面渲染 + linkage</Radio>
+            </Radio.Group>
+          </List.Item>
+        </List>
       </main>
     </>
   )
