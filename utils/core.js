@@ -106,7 +106,6 @@ function Json2Html({ jsonObj, globalData }) {
 
   // 处理jsonObj
   const currentWidget = getWidget(widget);
-  console.log('666', JSON2HTML_COMPONENTS)
   const CurrentComponent = JSON2HTML_COMPONENTS[currentWidget];
 
   if (!CurrentComponent) {

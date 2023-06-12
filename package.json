@@ -12,6 +12,7 @@
     "next": "13.4.5",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-form-validates": "^2.1.0",
     "zarm": "^3.0.14"
   }
 }

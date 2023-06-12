@@ -91,6 +91,7 @@ body {
   padding: 2vh;
   justify-content: center;
   min-height: 100vh;
+  background: rgba(49, 6, 242, 0.069);
 }
 
 a {

@@ -1,5 +1,5 @@
-import customDiv from './div';
+import Div from './div';
 
-export {
-  customDiv,
+export default {
+  Div,
 };

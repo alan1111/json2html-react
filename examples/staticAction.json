@@ -32,6 +32,29 @@
       }
     },
     {
+      "widget": "button",
+      "action": {
+        "type": "toast",
+        "data": {
+          "message": "我是点击动作触发的toast。"
+        }
+      },
+      "jProps": {
+        "block": true,
+        "theme": "primary",
+        "style": {
+          "marginTop": "50px"
+        }
+      },
+      "jChildren": {
+        "widget": "div",
+        "jProps": {
+          "label": "点击我触发action，将会触发toast动作",
+          "noTag": true
+        }
+      }
+    },
+    {
       "widget": "div",
       "action": {
         "type": "url",

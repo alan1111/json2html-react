@@ -3,9 +3,9 @@ import Head from 'next/head'
 import components from '../utils/components'
 import actions from '../utils/actions'
 import { Json2Html, registerAction, registerComponent } from '../utils/core';
-import data from '../examples/static.json'
+import data from '../examples/staticAction.json'
 
-export default function Static() {
+export default function StaticAction() {
   const [renderData, setRenderData] = useState(null);
   
   useEffect(() => {
@@ -29,8 +29,8 @@ export default function Static() {
   return (
     <>
       <Head>
-        <title>json2html静态页面渲染</title>
-        <meta name="description" content="json2html静态页面渲染" />
+        <title>json2html静态页面 + action渲染</title>
+        <meta name="description" content="json2html静态页面 + action渲染" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.jpeg" />
       </Head>
