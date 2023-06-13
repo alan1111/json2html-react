@@ -100,3 +100,16 @@ export default createForm()(function DynamicLinkage(props) {
 ## 表单组件
 
 目前测试用例强依赖于组件库：react-form-validates，大家可按需选择。
+
+## 源码解读
+
+推荐关注公众号："小火球烧屁股"。
+
+嫌烦？不要紧。
+直接上链接： [json2html-react 核心代码源码解读](https://mp.weixin.qq.com/s?__biz=MzkzMTQ1NDU4Nw==&mid=2247484271&idx=1&sn=f8230fba87efed9a997a7f53c1198508&chksm=c26b887bf51c016d7f6085fee855c69596932c6af8d2478362caa128df25350a353f74daa40c&token=1854349548&lang=zh_CN#rd)
+
+## 还有疑惑？
+
+可以扫码进群，知无不言。
+
+![交流群二维码](https://mmbiz.qpic.cn/sz_mmbiz_png/zRgqv9MMzbX9DaZX49ict0WRibXDjVz1kkkxsqtEtZsfTQqhTRKlplHqNVhueny1SgcSKcPpqkiaAUR8atsIlx1Rw/640?wx_fmt=png&wxfrom=5&wx_lazy=1&wx_co=1)
