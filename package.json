@@ -1,6 +1,6 @@
 {
   "name": "json2html-react",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "用于将json渲染成页面，包含页面的动作action，组件之间的联动linkage。",
   "scripts": {
     "dev": "next dev",
@@ -22,6 +22,11 @@
     "url": "https://github.com/alan1111/json2html-react/issues"
   },
   "homepage": "https://github.com/alan1111/json2html-react#readme",
+  "peerDependencies": {
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "zarm": "^3.0.14"
+  },
   "dependencies": {
     "next": "13.4.5",
     "react": "18.2.0",
