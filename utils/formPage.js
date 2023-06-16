@@ -26,4 +26,4 @@ function FormPage(props, ref) {
   return <Json2Html {...options} />;
 }
 
-export default forwardRef(createForm()(FormPage));
+export default createForm()(forwardRef(FormPage));

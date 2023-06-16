@@ -1,6 +1,6 @@
 {
   "name": "json2html-react",
-  "version": "1.2.0",
+  "version": "1.2.2",
   "description": "用于将json渲染成页面，包含页面的动作action，组件之间的联动linkage。",
   "main": "dist/cjs.js",
   "module": "dist/esm.js",
