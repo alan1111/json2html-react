@@ -6,7 +6,7 @@ import { formatData } from './tool';
 const createForm = Form.create;
 const FormItem = Form.Item;
 function FormPage(props, ref) {
-  const { renderJson, events } = props;
+  const { renderJson, events, form } = props;
 
   useImperativeHandle(ref, () => ({form}))
 
