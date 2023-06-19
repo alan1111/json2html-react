@@ -5,7 +5,7 @@ import { formatData } from './tool';
 
 const createForm = Form.create;
 const FormItem = Form.Item;
-function FormPage(props, ref) {
+function BasePage(props, ref) {
   const { renderJson, events, form } = props;
 
   useImperativeHandle(ref, () => ({form}))
@@ -26,4 +26,4 @@ function FormPage(props, ref) {
   return <Json2Html {...options} />;
 }
 
-export default createForm()(forwardRef(FormPage));
+export default createForm()(forwardRef(BasePage));

@@ -1,4 +1,4 @@
-import FormPage from './formPage'
+import BasePage from './basePage'
 import {
   Json2Html,
   handleAction,
@@ -7,7 +7,7 @@ import {
  } from './core'
 
 export {
-  FormPage,
+  BasePage,
   Json2Html,
   handleAction,
   registerAction,
