@@ -1,4 +1,4 @@
-import BasePage from './basePage'
+import RenderJSON from './renderJSON'
 import {
   Json2Html,
   handleAction,
@@ -7,7 +7,7 @@ import {
  } from './core'
 
 export {
-  BasePage,
+  RenderJSON,
   Json2Html,
   handleAction,
   registerAction,
