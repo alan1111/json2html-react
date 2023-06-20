@@ -2,47 +2,46 @@
 主要功能是：用于将json渲染成页面，包含页面的动作action，组件之间的联动linkage。
 ## 使用说明
 
-1. 启动应用：
-
+1. 下载json2html-react：
 ```bash
-npm run dev
+npm i -S json2html-react
 # or
-yarn dev
+yarn add json2html-react
 # or
-pnpm dev
+pnpm i -S json2html-react
 ```
-2. 组件引用说明：
+2. 引用：
+
 ```bash
 import { useState, useEffect } from 'react';
-import Form from 'react-form-validates';
-import Head from 'next/head'
 import components from '../utils/components'
 import actions from '../utils/actions'
-import { Json2Html, registerAction, registerComponent } from '../utils/core';
-import data from '../examples/dynamicLinkage.json'
+import { RenderJSON, registerAction, registerComponent } from 'json2html-react';
+import data from '../examples/mock.json'
 
-const createForm = Form.create;
-const FormItem = Form.Item;
-export default createForm()(function DynamicLinkage(props) {
-  const [renderData, setRenderData] = useState(null); // 待渲染的数据，由后端返回
-  
-  const { form } = props
+export default function DynamicLinkage() {
+  const [renderData, setRenderData] = useState(null);
 
   // 注册页面私有的action
   useEffect(() => {
     registerAction({
-      onSubmit: (d) => {
+      onSubmit: (d, {form}) => {
         console.log('json数据：', d);
-        const val = form.getFieldsValue();
-        console.log('表单数据：', val);
+        form.validateFieldsAndScroll((error, value) => {
+          if (error) {
+            console.log('表单出错了：', error);
+            return;
+          }
+          console.log('表单值：', value)
+        })
       },
     });
   }, []);
 
   useEffect(() => {
-    // 注册公共动作actions
+    // 注册actions
     registerAction(actions)
-    // 注册公共组件components
+    // 注册components
     registerComponent(components)
   }, [])
 
@@ -57,26 +56,28 @@ export default createForm()(function DynamicLinkage(props) {
     }
   }, [])
 
-  // 非表单页面，可不传globalData
-  const globalData = {
-    form, // 解析器core.js使用, 公共action内部如需获取表单状态，也可以使用。
-    FormItem, // 解析器core.js使用
-    events: { // form组件绑定事件，onChange, onBlur等
-      onChange: (k, el) => {
+  if (!renderData) {
+    return null;
+  }
+
+  const options = {
+    rootState: {}, // 非必须！页面自定义state，可用于联动判断，会注入到$globalState中。
+    renderJson: renderData, // 必须！待渲染的json数据
+    events: { //非必须！form组件绑定事件
+      onChange: (k, v, form) => {
         console.log('表单变化的key:', k);
-        console.log('表单变化的value:', el.target.value);
+        console.log('表单变化的value:', v);
+        console.log('表单form:', form);
       }
     }
   }
 
-  return (
-    <Json2Html jsonObj={renderData} globalData={globalData}></Json2Html>
-  )
-})
+  return (<RenderJSON {...options} />)
+}
 
 ```
+## json数据结构字段说明：
 
-3. json数据结构字段说明：
 ```bash
 {
   // 常规属性
@@ -97,9 +98,9 @@ export default createForm()(function DynamicLinkage(props) {
 }
 ```
 
-## 表单组件
+## 表单
 
-目前测试用例强依赖于组件库：react-form-validates，大家可按需选择。
+目前所有关于表单form的内容，json2html都帮处理好了。会将form对象暴露给events和action。具体form属性了解，可参考[rc-form](https://www.npmjs.com/package/rc-form)
 
 ## 源码解读
 
@@ -107,6 +108,19 @@ export default createForm()(function DynamicLinkage(props) {
 
 嫌烦？不要紧。
 直接上链接： [json2html-react 核心代码源码解读](https://mp.weixin.qq.com/s?__biz=MzkzMTQ1NDU4Nw==&mid=2247484271&idx=1&sn=f8230fba87efed9a997a7f53c1198508&chksm=c26b887bf51c016d7f6085fee855c69596932c6af8d2478362caa128df25350a353f74daa40c&token=1854349548&lang=zh_CN#rd)
+
+## 例子🌰查看
+
+1. 启动应用：
+
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+```
+2. 访问http://location:3000即可。
 
 ## 还有疑惑？
 

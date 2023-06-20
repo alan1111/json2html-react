@@ -106,26 +106,6 @@
           "label": "提交（可以查看控制台表单数据）"
         }
       }
-    },
-    {
-      "widget": "div",
-      "action": {
-        "type": "url",
-        "data": "/"
-      },
-      "jProps": {
-        "label": "返回主页",
-        "style": {
-          "textAlign": "center",
-          "marginTop": "50px",
-          "fontWeight": "bold",
-          "fontSize": "24px",
-          "backgroundColor": "blue",
-          "color": "yellow",
-          "borderRadius": "4px",
-          "padding": "5px"
-        }
-      }
     }
   ]
 }
