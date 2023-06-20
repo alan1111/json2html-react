@@ -112,4 +112,4 @@ export default createForm()(function DynamicLinkage(props) {
 
 可以扫码进群，知无不言。
 
-![交流群二维码](https://mmbiz.qpic.cn/sz_mmbiz_png/zRgqv9MMzbX9DaZX49ict0WRibXDjVz1kkkxsqtEtZsfTQqhTRKlplHqNVhueny1SgcSKcPpqkiaAUR8atsIlx1Rw/640?wx_fmt=png&wxfrom=5&wx_lazy=1&wx_co=1)
+![交流群二维码](./qr.jpg)

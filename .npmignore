@@ -1,3 +1,9 @@
 node_modules
 build
 package-lock.json
+/.next
+/examples
+/pages
+/publish
+/styles
+next.config.json

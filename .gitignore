@@ -2,3 +2,5 @@
 /build
 package-lock.json
 /.next
+.babelrc
+/dist
