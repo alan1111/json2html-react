@@ -109,8 +109,17 @@ export default function DynamicLinkage() {
 直接上链接： [json2html-react 核心代码源码解读](https://mp.weixin.qq.com/s?__biz=MzkzMTQ1NDU4Nw==&mid=2247484271&idx=1&sn=f8230fba87efed9a997a7f53c1198508&chksm=c26b887bf51c016d7f6085fee855c69596932c6af8d2478362caa128df25350a353f74daa40c&token=1854349548&lang=zh_CN#rd)
 
 ## 例子🌰查看
+1. clone项目：
+```bash
+git clone https://github.com/alan1111/json2html-react.git
+```
 
-1. 启动应用：
+2. 安装依赖： 
+```bash
+npm i
+```
+
+3. 启动应用：
 
 ```bash
 npm run dev
@@ -119,7 +128,8 @@ yarn dev
 # or
 pnpm dev
 ```
-2. 访问http://location:3000即可。
+
+4. 访问http://location:3000即可。
 
 ## 还有疑惑？
 
