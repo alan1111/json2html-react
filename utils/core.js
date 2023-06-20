@@ -38,46 +38,38 @@ const getWidget = (widgetStr) => widgetStr?.replace(widgetStr[0], widgetStr[0].t
 // 解析json，将json转化为页面html。只做页面初始化解析，后续动作组件内部控制。
 function Json2Html({ jsonObj, globalData }) {
   const [filterProps, setFilterProps] = useState(null); // 统一管理所有子组件的props，初始化为null，避免联动产生的无效渲染。
-  const [uniKey, setUniKey] = useState('');
-
-  useEffect(() => {
-    setUniKey(Math.random());
-  }, []);
 
   const { widget, action, jProps, jChildren, linkage, needFormItem, dataBind, rules, validateTrigger } = jsonObj || {};
-  const { form, FormItem } = globalData || {};
+  const { form, FormItem, rootState } = globalData || {};
 
-  const globalState = form ? form.getFieldsValue() : {}; // 用于管理页面所有状态。
+  const formState = form?.getFieldsValue() || {};
+  const globalState = { ...rootState, ...formState }; // 用于管理页面所有状态。
   const events = globalData?.events || {}; // 用于给表单组件绑定事件，后续会遍历，防止报错
-
-  // 处理表单组件默认值
-  useEffect(() => {
-    const { defaultValue } = filterProps || {};
-    if (defaultValue && form) {
-      form.setFieldsValue({
-        [dataBind]: defaultValue,
-      });
-    }
-  }, [dataBind, JSON.stringify(filterProps)]);
 
   // 处理action
   useEffect(() => {
-    if (action) {
+    if (action && filterProps) {
       setFilterProps((v) => ({ ...v, onClick: () => handleAction(action, globalData) }));
     }
-  }, [action, globalData]);
+  }, [action, globalData, JSON.stringify(filterProps)]);
 
   // 处理表单事件events绑定
   useEffect(() => {
-    if (needFormItem && Object.keys(events).length > 0) {
+    if (needFormItem && filterProps && Object.keys(events).length > 0) {
       // 处理表单事件回传，带上dataBind
       const tempV = {};
       Object.keys(events).forEach((e) => {
-        tempV[e] = (v) => events[e](dataBind, v);
+        tempV[e] = (v) => {
+          // 处理部分情况，组件form绑定未生效问题。 如设置defaultValue， 或者受控组件间接修改value值，未更新form绑定。
+          form.setFieldsValue({
+            [dataBind]: v,
+          });
+          events[e](dataBind, v, form);
+        };
       });
       setFilterProps((v) => ({ ...v, ...tempV }));
     }
-  }, [events, needFormItem, dataBind]);
+  }, [events, needFormItem, dataBind, JSON.stringify(filterProps)]);
 
   // 处理cascade联动
   useEffect(() => {
@@ -96,13 +88,19 @@ function Json2Html({ jsonObj, globalData }) {
     return null;
   }
 
-  // 遍历childrens
-  if (Array.isArray(jsonObj)) {
-    return jsonObj.map((i, k) => {
-      const tProps = { jsonObj: i, globalData };
-      return (<Json2Html key={`${uniKey}-${k}`} {...tProps} />);
-    });
-  }
+  const renderJChildren = () => {
+    if (!jChildren) {
+      return null;
+    }
+
+    if (Array.isArray(jChildren)) {
+      return jChildren.map((i, k) => {
+        return (<Json2Html key={+k} jsonObj={i} globalData={globalData} />);
+      });
+    }
+
+    return <Json2Html jsonObj={jChildren} globalData={globalData} />;
+  };
 
   // 处理jsonObj
   const currentWidget = getWidget(widget);
@@ -113,15 +111,14 @@ function Json2Html({ jsonObj, globalData }) {
     return null;
   }
 
-  const tempProps = { jsonObj: jChildren, globalData };
   if (needFormItem && form && FormItem) {
-    const tProps = form.getFieldProps(dataBind, { rules, validateTrigger: validateTrigger || '' }); // validateTrigger设置为‘’，将校验时机由页面控制
+    const tProps = form.getFieldProps(dataBind, { rules, validateTrigger: validateTrigger || 'onBlur' }); // validateTrigger设置为‘’，将校验时机由页面控制
 
     return (
-      <FormItem key={uniKey}>
+      <FormItem>
         <div {...tProps}>
           <CurrentComponent {...filterProps}>
-            {jChildren && (<Json2Html {...tempProps} />)}
+            {renderJChildren()}
           </CurrentComponent>
         </div>
       </FormItem>
@@ -129,7 +126,7 @@ function Json2Html({ jsonObj, globalData }) {
   }
   return (
     <CurrentComponent {...filterProps}>
-      {jChildren && (<Json2Html {...tempProps} />)}
+      {renderJChildren()}
     </CurrentComponent>
   );
 }
