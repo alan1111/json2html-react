@@ -67,6 +67,15 @@ function Json2Html({ jsonObj, globalData }) {
           events[e](dataBind, v, form);
         };
       });
+
+      // 兼容无需传入onChange的情况, 处理表单状态
+      if (!tempV.onChange) {
+        tempV.onChange = (v) => {
+          form.setFieldsValue({
+            [dataBind]: v,
+          });
+        };
+      }
       setFilterProps((v) => ({ ...v, ...tempV }));
     }
   }, [events, needFormItem, dataBind, JSON.stringify(filterProps)]);
