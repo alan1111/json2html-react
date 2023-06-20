@@ -1,5 +1,4 @@
-这是一个[Next.js](https://nextjs.org/)项目，可以用[`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app)生成项目。
-主要功能是：用于将json渲染成页面，包含页面的动作action，组件之间的联动linkage。
+json2html-react主要功能是：用于将json渲染成页面，包含页面的动作action，组件之间的联动linkage。
 ## 使用说明
 
 1. 下载json2html-react：
