@@ -4,6 +4,7 @@ package-lock.json
 /.next
 /examples
 /pages
-/publish
+/public
 /styles
-next.config.json
+jsconfig.json
+next.config.js
