@@ -23,6 +23,7 @@ const handleAction = async (action, globalData) => {
       const item = action[i];
       await handleAction(item, globalData);
     }
+    return;
   }
   const { type, data } = action;
   if (JSON2HTML_ACTIONS[type]) {
