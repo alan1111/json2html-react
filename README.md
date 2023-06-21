@@ -90,10 +90,10 @@ export default function DynamicLinkage() {
     }
   
   // 表单属性
-  needFormItem: true, // 固定配置，表示当前组件为表单组件
+  dataBind: String, // 固定配置，表示当前组件为表单组件，且对应表单元素的key值
   rules: Array, // 表单规则
   linkage: String, // 联动脚本，返回Object会以属性方式传入子组件；返回空则隐藏子组件。
-  validateTrigger： String, // 当前组件校验时机，onChange | onBlur 等
+  validateTrigger： String, // 当前组件校验时机，onChange | onBlur 等，默认onBlur，即失焦时候校验。
 }
 ```
 

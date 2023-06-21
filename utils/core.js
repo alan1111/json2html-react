@@ -19,7 +19,10 @@ const handleAction = async (action, globalData) => {
     return;
   }
   if (Array.isArray(action)) {
-    return action.forEach((i) => handleAction(i, globalData));
+    for (let i = 0; i < action.length; i++) {
+      const item = action[i];
+      await handleAction(item, globalData);
+    }
   }
   const { type, data } = action;
   if (JSON2HTML_ACTIONS[type]) {
@@ -39,7 +42,7 @@ const getWidget = (widgetStr) => widgetStr?.replace(widgetStr[0], widgetStr[0].t
 function Json2Html({ jsonObj, globalData }) {
   const [filterProps, setFilterProps] = useState(null); // 统一管理所有子组件的props，初始化为null，避免联动产生的无效渲染。
 
-  const { widget, action, jProps, jChildren, linkage, needFormItem, dataBind, rules, validateTrigger } = jsonObj || {};
+  const { widget, action, jProps, jChildren, linkage, dataBind, rules, validateTrigger } = jsonObj || {};
   const { form, FormItem, rootState } = globalData || {};
 
   const formState = form?.getFieldsValue() || {};
@@ -55,15 +58,20 @@ function Json2Html({ jsonObj, globalData }) {
 
   // 处理表单事件events绑定
   useEffect(() => {
-    if (needFormItem && filterProps && Object.keys(events).length > 0) {
+    if (dataBind && filterProps && Object.keys(events).length > 0) {
       // 处理表单事件回传，带上dataBind
       const tempV = {};
-      Object.keys(events).forEach((e) => {
-        tempV[e] = (v) => {
-          // 处理部分情况，组件form绑定未生效问题。 如设置defaultValue， 或者受控组件间接修改value值，未更新form绑定。
+      const setFormValue = (v) => {
+        if (!v.target) {
           form.setFieldsValue({
             [dataBind]: v,
           });
+        }
+      };
+      Object.keys(events).forEach((e) => {
+        tempV[e] = (v) => {
+          // 处理部分情况，组件form绑定未生效问题。 如设置defaultValue， 或者受控组件间接修改value值，未更新form绑定。
+          setFormValue(v);
           events[e](dataBind, v, form);
         };
       });
@@ -71,14 +79,12 @@ function Json2Html({ jsonObj, globalData }) {
       // 兼容无需传入onChange的情况, 处理表单状态
       if (!tempV.onChange) {
         tempV.onChange = (v) => {
-          form.setFieldsValue({
-            [dataBind]: v,
-          });
+          setFormValue(v);
         };
       }
       setFilterProps((v) => ({ ...v, ...tempV }));
     }
-  }, [events, needFormItem, dataBind, JSON.stringify(filterProps)]);
+  }, [events, dataBind, JSON.stringify(filterProps)]);
 
   // 处理cascade联动
   useEffect(() => {
@@ -120,8 +126,8 @@ function Json2Html({ jsonObj, globalData }) {
     return null;
   }
 
-  if (needFormItem && form && FormItem) {
-    const tProps = form.getFieldProps(dataBind, { rules, validateTrigger: validateTrigger || 'onBlur' }); // validateTrigger设置为‘’，将校验时机由页面控制
+  if (dataBind && form && FormItem) {
+    const tProps = form.getFieldProps(dataBind, { rules, validateTrigger: validateTrigger || '' }); // validateTrigger设置为‘’，将校验时机由页面控制
 
     return (
       <FormItem>

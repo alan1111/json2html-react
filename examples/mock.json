@@ -57,7 +57,6 @@
     {
       "widget": "input",
       "dataBind": "mobile",
-      "needFormItem": true,
       "rules": [
         {
           "message": "请输入手机号",
@@ -77,7 +76,6 @@
     {
       "widget": "input",
       "dataBind": "smscode",
-      "needFormItem": true,
       "linkage": "let mobileVal = $globalState.mobile; if(mobileVal && /^1[3456789]\\d{9}$/.test(mobileVal)){return {}}",
       "rules": [
         {
