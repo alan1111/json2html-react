@@ -14,26 +14,27 @@ const registerComponent = (components) => {
 };
 
 // 处理action动作列表
-const handleAction = async (action, globalData) => {
+const handleAction = async (action, globalData, parentRes) => {
   if (!action) {
     return;
   }
   if (Array.isArray(action)) {
+    let res = null;
     for (let i = 0; i < action.length; i++) {
       const item = action[i];
-      await handleAction(item, globalData);
+      res = await handleAction(item, globalData, res);
     }
     return;
   }
   const { type, data } = action;
   if (JSON2HTML_ACTIONS[type]) {
-    const res = await JSON2HTML_ACTIONS[type](data, globalData);
+    const res = await JSON2HTML_ACTIONS[type](data, globalData, parentRes);
     if (res?.type && JSON2HTML_ACTIONS[res.type]) {
-      handleAction(res, globalData);
+      return handleAction(res, globalData, res);
     }
-  } else {
-    console.error('不存在当前action：', type);
+    return res;
   }
+  console.error('不存在当前action：', type);
 };
 
 // 兼容小写开头 | 字符串中包含"-"
