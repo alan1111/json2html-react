@@ -1,10 +1,10 @@
-import RenderJSON from './renderJSON'
+import RenderJSON from './renderJSON';
+import Json2Html from './core';
 import {
-  Json2Html,
   handleAction,
   registerAction,
   registerComponent,
- } from './core'
+} from './bind';
 
 export {
   RenderJSON,
@@ -12,4 +12,4 @@ export {
   handleAction,
   registerAction,
   registerComponent,
-}
+};

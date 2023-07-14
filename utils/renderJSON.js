@@ -1,12 +1,34 @@
-import React from 'react';
-import Form from 'react-form-validates';
-import { Json2Html } from './core';
-import { formatData } from './tool';
+import React, { useState, useEffect, useMemo } from 'react';
+import Form from 'rc-field-form';
+import Json2Html from './core';
+import { formatData } from './utils';
+import { setGlobalForm, getGlobalForm } from './bind';
 
-const createForm = Form.create;
-const FormItem = Form.Item;
+const HOOK_MARK = 'RC_FORM_INTERNAL_HOOKS';
 function RenderJSON(props) {
-  const { renderJson, events, rootState, form } = props;
+  const { renderJson, events, initialValues } = props;
+
+  const [form] = Form.useForm();
+  const [formState, setFormState] = useState({});
+
+  const finalForm = useMemo(() => {
+    const globalForm = getGlobalForm();
+    if (globalForm) {
+      return globalForm;
+    }
+    setGlobalForm(form);
+    return form;
+  }, [form]);
+
+  useEffect(() => {
+    const { registerWatch } = finalForm.getInternalHooks(HOOK_MARK);
+    const cb = (values) => {
+      setFormState(values);
+    };
+    const fn = registerWatch(cb);
+    // 取消watch
+    return () => fn();
+  }, [finalForm]);
 
   if (!renderJson) {
     return null;
@@ -15,14 +37,16 @@ function RenderJSON(props) {
   const options = {
     jsonObj: formatData(renderJson),
     globalData: {
-      form, // 解析器使用
-      FormItem, // 解析器使用
+      formState,
       events, // 用于表单绑定事件
-      rootState, // 用于传入全局状态
     },
   };
 
-  return <Json2Html {...options} />;
+  return (
+    <Form form={finalForm} initialValues={initialValues}>
+      <Json2Html {...options} />
+    </Form>
+  );
 }
 
-export default createForm()(RenderJSON);
+export default RenderJSON;

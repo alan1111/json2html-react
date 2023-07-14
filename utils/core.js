@@ -1,107 +1,119 @@
-import React, { useState, useEffect } from 'react';
-
-let JSON2HTML_ACTIONS = null;
-let JSON2HTML_COMPONENTS = null;
-
-// 注册action动作列表
-const registerAction = (actions) => {
-  JSON2HTML_ACTIONS = { ...JSON2HTML_ACTIONS, ...actions };
-};
-
-// 注册components列表
-const registerComponent = (components) => {
-  JSON2HTML_COMPONENTS = { ...JSON2HTML_COMPONENTS, ...components };
-};
-
-// 处理action动作列表
-const handleAction = async (action, globalData, parentRes) => {
-  if (!action) {
-    return;
-  }
-  if (Array.isArray(action)) {
-    let res = null;
-    for (let i = 0; i < action.length; i++) {
-      const item = action[i];
-      res = await handleAction(item, globalData, res);
-    }
-    return;
-  }
-  const { type, data } = action;
-  if (JSON2HTML_ACTIONS[type]) {
-    const res = await JSON2HTML_ACTIONS[type](data, globalData, parentRes);
-    if (res?.type && JSON2HTML_ACTIONS[res.type]) {
-      return handleAction(res, globalData, res);
-    }
-    return res;
-  }
-  console.error('不存在当前action：', type);
-};
-
-// 兼容小写开头 | 字符串中包含"-"
-const getWidget = (widgetStr) => widgetStr?.replace(widgetStr[0], widgetStr[0].toUpperCase()).replace(/(-.)/g, (v) => v[1].toUpperCase());
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import { Field } from 'rc-field-form';
+import {
+  handleAction,
+  getPropsProxyData,
+  getWidget,
+  getComponents,
+  getFormValue,
+  getGlobalForm,
+} from './bind';
 
 // 解析json，将json转化为页面html。只做页面初始化解析，后续动作组件内部控制。
-function Json2Html({ jsonObj, globalData }) {
-  const [filterProps, setFilterProps] = useState(null); // 统一管理所有子组件的props，初始化为null，避免联动产生的无效渲染。
+export default function Json2Html({ jsonObj, globalData, parentPath }) {
+  const { dataBind } = jsonObj || {};
 
-  const { widget, action, jProps, jChildren, linkage, dataBind, rules, validateTrigger } = jsonObj || {};
-  const { form, FormItem, rootState } = globalData || {};
+  const [filterProps, setFilterProps] = useState(); // 统一管理所有子组件的props，初始化为null，避免联动产生的无效渲染。如果filterProps存在，表示展示，否则为隐藏。
 
-  const formState = form?.getFieldsValue() || {};
-  const globalState = { ...rootState, ...formState }; // 用于管理页面所有状态。
-  const events = globalData?.events || {}; // 用于给表单组件绑定事件，后续会遍历，防止报错
+  const [fieldExplain, setFieldExplain] = useState(''); // form error 展示
+  const [value, setValue] = useState(''); // form value 受控
 
-  // 处理action
-  useEffect(() => {
-    if (action && filterProps) {
-      setFilterProps((v) => ({ ...v, onClick: () => handleAction(action, globalData) }));
+  const [hide, setHide] = useState(false); // 用于联动是否展示组件
+
+  const { events, formState } = globalData || {};
+
+  const form = getGlobalForm();
+
+  // 获取当前表单的路径name，用户查询或者设置form值。
+  const pathName = useMemo(() => {
+    if (dataBind) {
+      return parentPath ? [].concat(parentPath, dataBind) : [dataBind];
     }
-  }, [action, globalData, JSON.stringify(filterProps)]);
+    return parentPath;
+  }, [parentPath, dataBind]);
+
+  // update action更改props
+  const newJson = useMemo(() => {
+    const propsProxyData = getPropsProxyData();
+    if (pathName) {
+      const proxyData = propsProxyData[pathName?.join('.')];
+      return { ...jsonObj, ...proxyData };
+    }
+    return jsonObj;
+  }, [jsonObj, pathName]);
+
+  const { widget, action, defaultValue, jProps, isFormField, jChildren, linkage, rules, validateTrigger } = newJson || {};
+
+  useEffect(() => {
+    setFilterProps(jProps);
+  }, [jProps]);
+
+  // 设置表单默认值
+  useEffect(() => {
+    if (defaultValue && pathName) {
+      form.setFieldValue(pathName, defaultValue);
+    }
+  }, [form, defaultValue, pathName]);
+
+  // 支持form库设置value时，表单未更新问题。https://www.npmjs.com/package/rc-field-form 第8点。
+  useEffect(() => {
+    if (formState && isFormField && pathName) {
+      setValue(form.getFieldValue(pathName) || '');
+    }
+  }, [formState, form, isFormField, pathName]);
 
   // 处理表单事件events绑定
   useEffect(() => {
-    if (dataBind && filterProps && Object.keys(events).length > 0) {
-      // 处理表单事件回传，带上dataBind
+    const { onChange, ...otherEvents } = events || {};
+    if (isFormField && pathName && otherEvents && Object.keys(otherEvents).length > 0) {
+      // 处理表单事件回传，带上pathName
       const tempV = {};
-      const setFormValue = (v) => {
-        if (!v.target) {
-          form.setFieldsValue({
-            [dataBind]: v,
-          });
-        }
-      };
-      Object.keys(events).forEach((e) => {
-        tempV[e] = (v) => {
+      Object.keys(otherEvents).forEach((event) => {
+        tempV[event] = (e) => {
           // 处理部分情况，组件form绑定未生效问题。 如设置defaultValue， 或者受控组件间接修改value值，未更新form绑定。
-          setFormValue(v);
-          events[e](dataBind, v, form);
+          otherEvents[event](getFormValue(e), { form, pathName });
         };
       });
-
-      // 兼容无需传入onChange的情况, 处理表单状态
-      if (!tempV.onChange) {
-        tempV.onChange = (v) => {
-          setFormValue(v);
-        };
-      }
       setFilterProps((v) => ({ ...v, ...tempV }));
     }
-  }, [events, dataBind, JSON.stringify(filterProps)]);
+  }, [isFormField, events, pathName, form]);
+
+  const handleChange = useCallback((e) => {
+    const tempV = getFormValue(e);
+
+    // 托管rc-field-form中默认的设置form value功能。部分情况会出现偏差，例如自定义组件checkbox, 无论状态是true或者false，form.getFieldsValue()返回的始终是string类型的'true'
+    setTimeout(() => {
+      form.setFieldValue(pathName, tempV);
+      if (events?.onChange) {
+        events.onChange(tempV);
+      }
+    });
+  }, [form, events, pathName]);
+
+  // 处理action
+  useEffect(() => {
+    if (action) {
+      setFilterProps((v) => ({ ...v, onClick: () => handleAction(action) }));
+    }
+  }, [action, form]);
 
   // 处理cascade联动
   useEffect(() => {
     if (linkage) {
       // eslint-disable-next-line
-      const fn = new Function('$globalState', linkage);
-      const newState = fn(globalState);
-      setFilterProps(newState ? (v) => ({ ...v, ...jProps, ...newState }) : null);
-    } else {
-      setFilterProps((v) => ({ ...v, ...jProps }));
+      const fn = new Function('$formState', linkage);
+      const newState = fn(formState);
+      if (!newState) {
+        setHide(true);
+      } else {
+        setHide(false);
+        setFilterProps((v) => ({ ...v, ...newState }));
+      }
     }
-  }, [JSON.stringify(globalState), linkage, jProps]);
+  }, [formState, linkage]);
 
-  // 最里层jsonObj为undefined时childrens为null; filterProps为空时，表示组件初始化或者联动隐藏时无需渲染子组件。
-  if (!jsonObj || !filterProps) {
+  // 最里层jsonObj为undefined时childrens为null; hide为true时，表示组件初始化或者联动隐藏时无需渲染子组件。
+  if (hide) {
     return null;
   }
 
@@ -112,33 +124,42 @@ function Json2Html({ jsonObj, globalData }) {
 
     if (Array.isArray(jChildren)) {
       return jChildren.map((i, k) => {
-        return (<Json2Html key={+k} jsonObj={i} globalData={globalData} />);
+        return (<Json2Html key={+k} jsonObj={i} parentPath={pathName} globalData={globalData} />);
       });
     }
 
-    return <Json2Html jsonObj={jChildren} globalData={globalData} />;
+    return <Json2Html jsonObj={jChildren} parentPath={pathName} globalData={globalData} />;
   };
 
   // 处理jsonObj
   const currentWidget = getWidget(widget);
-  const CurrentComponent = JSON2HTML_COMPONENTS[currentWidget];
+  const CurrentComponent = getComponents()[currentWidget];
 
   if (!CurrentComponent) {
     console.error('不存在当前组件：', widget);
     return null;
   }
 
-  if (dataBind && form && FormItem) {
-    const tProps = form.getFieldProps(dataBind, { rules, validateTrigger: validateTrigger || '' }); // validateTrigger设置为‘’，将校验时机由页面控制
+  if (isFormField) {
+    const tProps = {
+      name: pathName,
+      rules,
+      validateTrigger,
+      onMetaChange: () => {
+        const err = form.getFieldError(pathName);
+        setFieldExplain(err?.[0]);
+      },
+    };
 
     return (
-      <FormItem>
-        <div {...tProps}>
-          <CurrentComponent {...filterProps}>
+      <Field {...tProps}>
+        <div className="field-block">
+          <CurrentComponent value={value} onChange={handleChange} {...filterProps}>
             {renderJChildren()}
           </CurrentComponent>
+          {fieldExplain && (<div className="field-explain">{fieldExplain}</div>)}
         </div>
-      </FormItem>
+      </Field>
     );
   }
   return (
@@ -147,10 +168,3 @@ function Json2Html({ jsonObj, globalData }) {
     </CurrentComponent>
   );
 }
-
-export {
-  Json2Html,
-  handleAction,
-  registerAction,
-  registerComponent,
-};
