@@ -2,6 +2,14 @@ let GLOBAL_FORM = null;
 let JSON2HTML_COMPONENTS = null;
 const PROPS_PROXY_DATA = {};
 
+// 检查是否需要更新form value。
+const checkValue = (name, data) => {
+  const { value } = data || {};
+  if (typeof value !== 'undefined') {
+    GLOBAL_FORM?.setFieldValue?.(name, value);
+  }
+};
+
 let JSON2HTML_ACTIONS = {
   // dataList: [{nameList: [], name, value: {}}] =》 [{nameList:['a','b'], value: {defaultValue: '1'}}, {name:'c', value: {jProps: {style: {color: 'red'}}}}]
   update: (dataList, { parentResult, form }) => {
@@ -13,11 +21,13 @@ let JSON2HTML_ACTIONS = {
         // 1对1模式
         if (name) {
           PROPS_PROXY_DATA[name] = { ...PROPS_PROXY_DATA[name], ...tempValue };
+          checkValue(name, tempValue);
         }
         // 多对1模式
         if (Array.isArray(nameList)) {
           nameList.forEach((nI) => {
             PROPS_PROXY_DATA[nI] = { ...PROPS_PROXY_DATA[nI], ...tempValue };
+            checkValue(nI, tempValue);
           });
         }
       });
