@@ -44,7 +44,21 @@ const getGlobalForm = () => {
 };
 
 const setGlobalForm = (v) => {
-  GLOBAL_FORM = v;
+  GLOBAL_FORM = {
+    ...v,
+    validateFieldsAndScroll: async (...args) => {
+      try {
+        const values = await v.validateFields(...args);
+        return values;
+      } catch (e) {
+        const element = document.querySelector('.field-explain');
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' });
+        }
+        return Promise.reject(e);
+      }
+    },
+  };
 };
 
 // 获取props proxy数据
