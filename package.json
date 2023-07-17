@@ -1,6 +1,6 @@
 {
   "name": "json2html-react",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "用于将json渲染成页面，包含页面的动作action，组件之间的联动linkage。",
   "main": "dist/cjs.js",
   "module": "dist/esm.js",
@@ -20,7 +20,7 @@
   "keywords": [
     "react",
     "rc-form",
-    "react-form-validates",
+    "rc-field-form",
     "form",
     "react form", 
     "react components form",
@@ -39,7 +39,7 @@
     "react-dom": "18.2.0"
   },
   "dependencies": {
-    "react-form-validates": "^2.1.0"
+    "rc-field-form": "^1.34.1"
   },
   "devDependencies": {
     "next": "13.4.5",

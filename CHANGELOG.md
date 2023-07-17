@@ -1,5 +1,14 @@
 # 版本更新日志
 
+## v2.1.2
+
+- feat
+  - 对于form组件需要额外添加属性，{"isFormField": true}。dataBind将不仅仅作为form的key值，也会作为path的一部分，方便form设置值，update action更新，联动等。
+  - 联动中注入的变量名称发生改变：$globalState -> $formState。
+  - action的入参，第一个是传入的data，第二个包含两个内容{form, parentResult}。其中form，为表单管理对象；parentResult为上一个action返回的内容。
+  - events的入参，第一个是value，第二个包含两个内容{form, pathName}。其中form，为表单管理对象；pathName由当前组件及其夫组件的dataBind组成的一个数组，主要用于表单的增删改查以及update action的更新。
+  - 更新examples
+
 ## v2.1.0
 
 - feat

@@ -85,7 +85,7 @@ export default function Json2Html({ jsonObj, globalData, parentPath }) {
     setTimeout(() => {
       form.setFieldValue(pathName, tempV);
       if (events?.onChange) {
-        events.onChange(tempV);
+        events.onChange(tempV, { form, pathName });
       }
     });
   }, [form, events, pathName]);

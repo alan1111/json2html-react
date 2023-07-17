@@ -3,8 +3,6 @@ import ReactDOM from 'react-dom';
 import { Toast, Popup } from 'zarm';
 import { RenderJSON, registerAction } from './main';
 
-import { Toast } from 'zarm';
-
 const toast = (data) => {
   const { message, duration } = data || {};
   Toast.show(message, duration || 3000);

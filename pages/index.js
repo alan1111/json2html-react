@@ -11,15 +11,14 @@ export default function DynamicLinkage() {
   // 注册页面私有的action
   useEffect(() => {
     registerAction({
-      onSubmit: (d, {form}) => {
+      onSubmit: async (d, {form}) => {
         console.log('json数据：', d);
-        form.validateFieldsAndScroll((error, value) => {
-          if (error) {
-            console.log('表单出错了：', error);
-            return;
-          }
-          console.log('表单值：', value)
-        })
+        try {
+          const values = await form.validateFields();
+          console.log('values: ', values);
+        } catch (errorList) {
+          console.log('errorList', errorList)
+        }
       },
     });
   }, []);
@@ -43,13 +42,15 @@ export default function DynamicLinkage() {
   }, [])
 
   const options = {
-    rootState: {}, // 页面自定义state，可用于联动判断，会注入到$globalState中。
+    rootState: {}, // 页面自定义state，可用于联动判断，会注入到$formState中。
     renderJson: renderData, // 待渲染的json数据
     events: { // form组件绑定事件
-      onChange: (k, v, form) => {
-        console.log('表单变化的key:', k);
+      onChange: (v, opt) => {
+        const {form, pathName}  = opt || {};
+        console.log('表单变化的key:', pathName);
         console.log('表单变化的value:', v);
         console.log('表单form:', form);
+        console.log('通过form获取值', form.getFieldValue(pathName));
       }
     }
   }

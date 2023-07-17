@@ -38,5 +38,5 @@ export default {
     terser(),
     uglify(),
   ],
-  external: ['react', 'react-dom', 'react-form-validates'],
+  external: ['react', 'react-dom', 'rc-field-form'],
 };
