@@ -21,7 +21,7 @@ import data from '../examples/mock.json'
 export default function DynamicLinkage() {
   const [renderData, setRenderData] = useState(null);
 
-  // 注册页面私有的action
+  // 注册页面全局的action
   useEffect(() => {
     registerAction({
       onSubmit: (d, {form}) => {
@@ -60,7 +60,7 @@ export default function DynamicLinkage() {
   }
 
   const options = {
-    rootState: {}, // 非必须！页面自定义state，可用于联动判断，会注入到$globalState中。
+    initialValues: {}, // 非必须！初始化form值。
     renderJson: renderData, // 必须！待渲染的json数据
     events: { //非必须！form组件绑定事件
       onChange: (k, v, form) => {
@@ -90,7 +90,8 @@ export default function DynamicLinkage() {
     }
   
   // 表单属性
-  dataBind: String, // 固定配置，表示当前组件为表单组件，且对应表单元素的key值
+  dataBind: String, // 当前组件对应的form key值，也是path的一部分。
+  isFormField: Boolean // 为true时，表示当前组件为表单组件
   rules: Array, // 表单规则
   linkage: String, // 联动脚本，返回Object会以属性方式传入子组件；返回空则隐藏子组件。
   validateTrigger： String, // 当前组件校验时机，onChange | onBlur 等，默认onBlur，即失焦时候校验。
@@ -99,14 +100,15 @@ export default function DynamicLinkage() {
 
 ## 表单
 
-目前所有关于表单form的内容，json2html都帮处理好了。会将form对象暴露给events和action。具体form属性了解，可参考[rc-form](https://www.npmjs.com/package/rc-form)
+目前所有关于表单form的内容，json2html都帮处理好了。会将form对象暴露给events和action。具体form属性了解，可参考[rc-field-form](https://www.npmjs.com/package/rc-field-form)
 
 ## 源码解读
 
 推荐关注公众号："小火球烧屁股"。
 
-嫌烦？不要紧。
-直接上链接： [json2html-react 核心代码源码解读](https://mp.weixin.qq.com/s?__biz=MzkzMTQ1NDU4Nw==&mid=2247484271&idx=1&sn=f8230fba87efed9a997a7f53c1198508&chksm=c26b887bf51c016d7f6085fee855c69596932c6af8d2478362caa128df25350a353f74daa40c&token=1854349548&lang=zh_CN#rd)
+嫌烦？不要紧。直接上链接： 
+[json2html-react 核心代码源码解读](https://mp.weixin.qq.com/s?__biz=MzkzMTQ1NDU4Nw==&mid=2247484271&idx=1&sn=f8230fba87efed9a997a7f53c1198508&chksm=c26b887bf51c016d7f6085fee855c69596932c6af8d2478362caa128df25350a353f74daa40c&token=1854349548&lang=zh_CN#rd)
+[json2html实战](https://mp.weixin.qq.com/s?__biz=MzkzMTQ1NDU4Nw==&mid=2247484526&idx=1&sn=ba82a0a3abd427d25cd0c96b3ac0a87e&chksm=c26b8f7af51c066c44336256ab1e7069dc968747ab4949d46cda73f56cf58377462db05124ae&token=1531096240&lang=zh_CN#rd)
 
 ## 例子🌰查看
 1. clone项目：
@@ -133,6 +135,6 @@ pnpm dev
 
 ## 还有疑惑？
 
-可以扫码进群，知无不言。
+由于群二维码有时效性，可以扫码加作者微信，可以直接提问题。也欢迎加入群聊，看看大家都有哪些问题。
 
-![交流群二维码](./qr.jpg)
+![作者](./author.png)

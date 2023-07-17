@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import Form from 'rc-field-form';
 import Json2Html from './core';
-import { formatData } from './utils';
+import { formatData } from './tool';
 import { setGlobalForm, getGlobalForm } from './bind';
 
 const HOOK_MARK = 'RC_FORM_INTERNAL_HOOKS';
