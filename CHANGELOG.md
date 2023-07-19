@@ -1,5 +1,15 @@
 # 版本更新日志
 
+## v2.1.6
+
+-update
+  - update numToPx to numToRem。即：renderJson可以配置任何动态比例的大小。例如：width: r(10); fontSize: r(24);等等。
+
+## v2.1.5
+
+-feat
+  - support form.validateFieldsAndScroll()。
+
 ## v2.1.2
 
 - feat
