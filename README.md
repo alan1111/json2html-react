@@ -103,7 +103,7 @@ export default function DynamicLinkage() {
 
 ## 表单
 
-目前所有关于表单form的内容，json2html都帮处理好了。会将form对象暴露给events和action。具体form属性了解，可参考[rc-field-form](https://www.npmjs.com/package/rc-field-form)
+目前所有关于表单form的内容，json2html都已处理好了。会将form对象暴露给events和action。具体form属性了解，可参考[rc-field-form](https://www.npmjs.com/package/rc-field-form)
 
 ## 源码解读
 
