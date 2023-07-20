@@ -1,5 +1,9 @@
-文档：[英文](https://github.com/alan1111/json2html-react/blob/main/README.md)｜[中文](https://github.com/alan1111/json2html-react/blob/main/README_CN.md)
+## 文档
+[英文](https://github.com/alan1111/json2html-react/blob/main/README.md)｜[中文](https://github.com/alan1111/json2html-react/blob/main/README_CN.md)
+
+## 简介
 json2html-react主要功能是：用于将json渲染成页面，包含页面的动作action，组件之间的联动linkage。
+
 ## 使用说明
 
 1. 下载json2html-react：

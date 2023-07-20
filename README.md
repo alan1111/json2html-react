@@ -1,4 +1,7 @@
-Document[EN](https://github.com/alan1111/json2html-react/blob/main/README.md)｜[CN](https://github.com/alan1111/json2html-react/blob/main/README_CN.md)
+## Document
+[EN](https://github.com/alan1111/json2html-react/blob/main/README.md)｜[CN](https://github.com/alan1111/json2html-react/blob/main/README_CN.md)
+
+## Introduction
 The main function of json2html-react is to render JSON into a page, including page action and linkage between components.
 ## Instructions for use
 
