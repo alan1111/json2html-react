@@ -6,5 +6,7 @@ package-lock.json
 /pages
 /public
 /styles
+/utils
+rollup.config.js
 jsconfig.json
 next.config.js
