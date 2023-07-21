@@ -22,7 +22,7 @@ const numToRem = (str) => {
 
 const formatData = (data) => {
   if (data) {
-    const tempData = JSON.parse(JSON.stringify(data));
+    const tempData = structuredClone(data);
     const fn = (obj) => {
       const { jChildren, jProps } = obj;
       const { style } = jProps || {};
