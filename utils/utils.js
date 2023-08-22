@@ -10,6 +10,9 @@ const getNumReg = /^r\((\d+)\)$/;
 const styleLengthReg = /r\((\d+)\)/g; // 例如： r(160) 或者 "0 r(4) r(16) 0 rgba(204,68,0,0.04)"
 
 const numToRem = (str) => {
+  if (typeof str !== 'string') {
+    return str;
+  }
   const matchRes = str.match(styleLengthReg);
   if (matchRes) {
     matchRes.forEach((i) => {
@@ -24,6 +27,11 @@ const formatData = (data) => {
   if (data) {
     const tempData = structuredClone(data);
     const fn = (obj) => {
+      if (Array.isArray(obj)) {
+        return obj.forEach((child) => {
+          fn(child);
+        });
+      }
       const { jChildren, jProps } = obj;
       const { style } = jProps || {};
       if (style) {

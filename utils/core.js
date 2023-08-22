@@ -20,7 +20,7 @@ export default function Json2Html({ jsonObj, globalData, parentPath }) {
 
   const [hide, setHide] = useState(false); // 用于联动是否展示组件
 
-  const { events, formState } = globalData || {};
+  const { events, formState, editCb } = globalData || {};
 
   const form = getGlobalForm();
 
@@ -65,7 +65,7 @@ export default function Json2Html({ jsonObj, globalData, parentPath }) {
   // 处理表单事件events绑定
   useEffect(() => {
     const { onChange, ...otherEvents } = events || {};
-    if (isFormField && pathName && otherEvents && Object.keys(otherEvents).length > 0) {
+    if (!editCb && isFormField && pathName && otherEvents && Object.keys(otherEvents).length > 0) {
       // 处理表单事件回传，带上pathName
       const tempV = {};
       Object.keys(otherEvents).forEach((event) => {
@@ -76,11 +76,15 @@ export default function Json2Html({ jsonObj, globalData, parentPath }) {
       });
       setFilterProps((v) => ({ ...v, ...tempV }));
     }
-  }, [isFormField, events, pathName, form]);
+  }, [editCb, isFormField, events, pathName, form]);
 
   const handleChange = useCallback((e) => {
+    if (editCb) {
+      return;
+    }
     const tempV = getFormValue(e);
-
+    setValue(tempV); // 避免输入框中间修改或者删除时，光标自动锁定末尾问题。
+    
     // 托管rc-field-form中默认的设置form value功能。部分情况会出现偏差，例如自定义组件checkbox, 无论状态是true或者false，form.getFieldsValue()返回的始终是string类型的'true'
     setTimeout(() => {
       form.setFieldValue(pathName, tempV);
@@ -88,14 +92,25 @@ export default function Json2Html({ jsonObj, globalData, parentPath }) {
         events.onChange(tempV, { form, pathName });
       }
     });
-  }, [form, events, pathName]);
+  }, [editCb, form, events, pathName]);
 
   // 处理action
   useEffect(() => {
-    if (action) {
+    if (!editCb && action) {
       setFilterProps((v) => ({ ...v, onClick: () => handleAction(action) }));
     }
-  }, [action, form]);
+
+    // 如果是编辑模式，将会覆盖默认行为，并统一成弹窗编辑信息。
+    if (editCb) {
+      setFilterProps((v) => ({
+        ...v,
+        onClick: (e) => {
+          e.stopPropagation();
+          editCb(jsonObj);
+        },
+      }));
+    }
+  }, [editCb, jsonObj, action, form]);
 
   // 处理cascade联动
   useEffect(() => {
