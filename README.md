@@ -108,7 +108,7 @@ export default function DynamicLinkage() {
 
 ## form
 
-Currently, all the content related to the form, json2html-react has been processed. The form object will be exposed to events and actions. please refer to[rc-field-form](https://www.npmjs.com/package/rc-field-form)
+Currently, all the content related to the form, json2html-react has been processed. The form object will be exposed to events and actions. please refer to [rc-field-form](https://www.npmjs.com/package/rc-field-form)
 
 ## example🌰
 1. Clone project：
