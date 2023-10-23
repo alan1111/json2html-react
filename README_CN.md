@@ -68,6 +68,7 @@ export default function DynamicLinkage() {
   const options = {
     initialValues: {}, // 非必须！初始化form值。
     renderJson: renderData, // 必须！待渲染的json数据
+    css: '', 非必须！主要用于全局css样式的引入，可以添加class/id等。
     events: { //非必须！form组件绑定事件
       onChange: (v, opt) => {
         const {form, pathName}  = opt || {};

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import Form from 'rc-field-form';
 import Json2Html from './core';
-import { formatData } from './utils';
+import { formatData, addStyle } from './utils';
 import { setGlobalForm, getGlobalForm } from './bind';
 
 const HOOK_MARK = 'RC_FORM_INTERNAL_HOOKS';
@@ -12,11 +12,12 @@ function RenderJSON(props) {
    * editCb：用于html2json时获取当前点击模块的json数据；
    * initialValues： 用于作为form初始值，只能首次渲染默认展示。
    */
-  const { renderJson, events, editCb, initialValues } = props;
+  const { renderJson, events, editCb, initialValues, css } = props;
 
   const [form] = Form.useForm();
   const [formState, setFormState] = useState({});
 
+  // 当前页面如果使用了多个渲染引擎组件进行渲染，仅维持1个form实例，从而所有组件可以共享form状态。
   const finalForm = useMemo(() => {
     const globalForm = getGlobalForm();
     if (globalForm) {
@@ -25,6 +26,13 @@ function RenderJSON(props) {
     setGlobalForm(form);
     return form;
   }, [form]);
+
+  // 支持css样式在线编辑
+  useEffect(() => {
+    if (css) {
+      addStyle(css);
+    }
+  }, [css]);
 
   useEffect(() => {
     const { registerWatch } = finalForm.getInternalHooks(HOOK_MARK);

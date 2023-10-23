@@ -8,6 +8,7 @@ import {
   getFormValue,
   getGlobalForm,
 } from './bind';
+import { backFormatData } from './utils';
 
 // 解析json，将json转化为页面html。只做页面初始化解析，后续动作组件内部控制。
 export default function Json2Html({ jsonObj, globalData, parentPath }) {
@@ -45,7 +46,7 @@ export default function Json2Html({ jsonObj, globalData, parentPath }) {
   const { widget, action, defaultValue, jProps, isFormField, jChildren, linkage, rules, validateTrigger } = newJson || {};
 
   useEffect(() => {
-    setFilterProps(jProps);
+    setFilterProps((v) => ({ ...v, ...jProps }));
   }, [jProps]);
 
   // 设置表单默认值
@@ -84,7 +85,7 @@ export default function Json2Html({ jsonObj, globalData, parentPath }) {
     }
     const tempV = getFormValue(e);
     setValue(tempV); // 避免输入框中间修改或者删除时，光标自动锁定末尾问题。
-    
+
     // 托管rc-field-form中默认的设置form value功能。部分情况会出现偏差，例如自定义组件checkbox, 无论状态是true或者false，form.getFieldsValue()返回的始终是string类型的'true'
     setTimeout(() => {
       form.setFieldValue(pathName, tempV);
@@ -106,7 +107,7 @@ export default function Json2Html({ jsonObj, globalData, parentPath }) {
         ...v,
         onClick: (e) => {
           e.stopPropagation();
-          editCb(jsonObj);
+          editCb(backFormatData(jsonObj));
         },
       }));
     }
@@ -115,14 +116,18 @@ export default function Json2Html({ jsonObj, globalData, parentPath }) {
   // 处理cascade联动
   useEffect(() => {
     if (linkage) {
-      // eslint-disable-next-line
-      const fn = new Function('$formState', linkage);
-      const newState = fn(formState);
-      if (!newState) {
-        setHide(true);
-      } else {
-        setHide(false);
-        setFilterProps((v) => ({ ...v, ...newState }));
+      try {
+        // eslint-disable-next-line
+        const fn = new Function('$formState', linkage);
+        const newState = fn(formState);
+        if (!newState) {
+          setHide(true);
+        } else {
+          setHide(false);
+          setFilterProps((v) => ({ ...v, ...newState }));
+        }
+      } catch (e) {
+        console.info('from core.js about linkage: ', e);
       }
     }
   }, [formState, linkage]);
@@ -148,7 +153,7 @@ export default function Json2Html({ jsonObj, globalData, parentPath }) {
 
   // 处理jsonObj
   const currentWidget = getWidget(widget);
-  const CurrentComponent = getComponents()[currentWidget];
+  const CurrentComponent = currentWidget.reduce((res, current) => res[current], getComponents());
 
   if (!CurrentComponent) {
     console.error('不存在当前组件：', widget);

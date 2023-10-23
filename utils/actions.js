@@ -12,6 +12,15 @@ const url = (data) => {
   window.location.href = data;
 };
 
+const sleep = (data) => {
+  const { time } = data || {};
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({});
+    }, time || 0);
+  });
+};
+
 const actionPopup = (data) => {
   const { jChildren, direction, isMaskClose, className } = data;
 
@@ -70,5 +79,6 @@ const actionPopup = (data) => {
 export default {
   toast,
   url,
+  sleep,
   'action-popup': actionPopup,
 };

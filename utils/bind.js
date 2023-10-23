@@ -112,7 +112,7 @@ const handleAction = async (action, parentData) => {
 };
 
 // 兼容小写开头 | 字符串中包含"-"
-const getWidget = (widgetStr) => widgetStr?.replace(widgetStr[0], widgetStr[0].toUpperCase()).replace(/(-.)/g, (v) => v[1].toUpperCase());
+const getWidget = (str) => str.split('.').map((widgetStr) => widgetStr?.replace(widgetStr[0], widgetStr[0].toUpperCase()).replace(/(-.)/g, (v) => v[1].toUpperCase()));
 
 const getFormValue = (e) => {
   const type = e?.target?.type;

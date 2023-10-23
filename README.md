@@ -66,7 +66,7 @@ export default function DynamicLinkage() {
 
   const options = {
     renderJson: renderData, // Required！JSON data to be rendered.
-
+    css: '', // Not required! There is class/id and so on.
     initialValues: {}, // Not required! Initialize the form values.
     events: { // Not required! There is form components binding events.
       onChange: (v, opt) => {
