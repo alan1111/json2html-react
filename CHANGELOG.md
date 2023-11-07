@@ -1,5 +1,10 @@
 # 版本更新日志
 
+## v2.3.1
+
+-fixed
+  - document is undefined in service side。
+
 ## v2.3.0
 
 -fixed

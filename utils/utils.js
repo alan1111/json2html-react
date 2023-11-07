@@ -111,11 +111,13 @@ const backFormatData = (data) => {
 };
 
 const addStyle = (() => {
-  const style = document.createElement('style');
-  document.head.append(style);
-  return (styleString) => {
-    style.textContent = styleString;
-  };
+  if (typeof document !== 'undefined') {
+    const style = document.createElement('style');
+    document.head.append(style);
+    return (styleString) => {
+      style.textContent = styleString;
+    };
+  }
 })();
 
 export {
