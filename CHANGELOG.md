@@ -1,5 +1,13 @@
 # 版本更新日志
 
+## v2.3.0
+
+-fixed
+  - 支持链式组件，例如：{widget: "list.item"}，则会查找List组件下面的Item组件。
+
+- feat
+  - 支持全局css的引入，可以在option中添加css字符串，将直接引入到页面head中。
+
 ## v2.2.0
 
 -fixed
