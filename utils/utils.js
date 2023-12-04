@@ -46,7 +46,7 @@ const RemToNum = (str) => {
 
 const formatData = (data) => {
   if (data) {
-    const tempData = structuredClone(data);
+    const tempData = JSON.parse(JSON.stringify(data));
     const fn = (obj) => {
       if (Array.isArray(obj)) {
         return obj.forEach((child) => {
@@ -79,7 +79,7 @@ const formatData = (data) => {
 
 const backFormatData = (data) => {
   if (data) {
-    const tempData = structuredClone(data);
+    const tempData = JSON.parse(JSON.stringify(data));
     const fn = (obj) => {
       if (Array.isArray(obj)) {
         return obj.forEach((child) => {

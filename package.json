@@ -1,6 +1,6 @@
 {
   "name": "json2html-react",
-  "version": "2.3.1",
+  "version": "2.3.2",
   "description": "The main function is to render JSON into a page, including page action and linkage between components.",
   "main": "dist/cjs.js",
   "module": "dist/esm.js",
