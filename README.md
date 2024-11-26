@@ -1,5 +1,5 @@
-##Announcement on the Stop of Updating the json2hml-react Library
-```bash
+## Announcement on the Stop of Updating the json2hml-react Library
+
 Dear users
 
 With great regret and sincere apologies, we would like to inform everyone that due to our team's in-depth exploration and research and development, we have now launched a more innovative and high-performance alternative solution. Therefore, we have decided to stop updating and maintaining the json2hhtml-react library.
@@ -20,7 +20,7 @@ Once again, we deeply apologize for any inconvenience caused to everyone. We sin
 Thank you all for your continuous support and kindness towards us!
 
 -- 小火球
-```
+
 ## Document
 [EN](https://github.com/alan1111/json2html-react/blob/main/README.md)｜[CN](https://github.com/alan1111/json2html-react/blob/main/README_CN.md)
 

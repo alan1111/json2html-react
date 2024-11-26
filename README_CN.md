@@ -1,5 +1,4 @@
 ## json2html-react 库停止更新公告
-```bash
 尊敬的各位用户：
 
     在此，我们怀着万分遗憾与诚挚的歉意告知大家，由于我们团队经过深入探索与研发，现已推出了更具创新性和卓越性能的替代方案，故而决定对 json2html-react 库停止更新维护。
@@ -19,7 +18,7 @@
 感谢大家一直以来对我们的支持与厚爱！
 
 -- 小火球
-```
+
 ## 文档
 [英文](https://github.com/alan1111/json2html-react/blob/main/README.md)｜[中文](https://github.com/alan1111/json2html-react/blob/main/README_CN.md)
 
