@@ -1,3 +1,26 @@
+##Announcement on the Stop of Updating the json2hml-react Library
+```bash
+Dear users
+
+With great regret and sincere apologies, we would like to inform everyone that due to our team's in-depth exploration and research and development, we have now launched a more innovative and high-performance alternative solution. Therefore, we have decided to stop updating and maintaining the json2hhtml-react library.
+
+We are well aware that the json2hml-react library has gained the trust and selection of many users in the past few days, and has contributed to everyone's project development process. We are deeply grateful for this. However, with the rapid development of technology, we have to make this difficult decision in order to provide everyone with a better, more efficient, and convenient development experience.
+
+But please rest assured that we have carefully prepared a brand new plan for this change, which will open up a new development perspective for everyone and bring many surprising features:
+1、 A true zero programming experience
+The new solution has achieved an unprecedented breakthrough, allowing you to easily create and layout pages without the need to write complex code. Whether you are an experienced developer or a novice, you can quickly achieve your ideal page effect in a zero programming environment, greatly saving development time and energy, allowing you to focus more on business logic and creative ideas.
+2、 High flexibility and customizability
+Although no programming is required, the new solution never sacrifices flexibility and customization. It provides a rich variety of preset templates and components, allowing you to easily personalize and customize various elements of the page according to specific project needs. From page style, layout structure to element style, everything can be changed according to your wishes, ensuring that you create a unique and perfect page that meets project needs.
+3、 Excellent performance and compatibility
+While pursuing convenience, the new solution also demonstrates outstanding performance and compatibility. It has undergone rigorous testing and optimization, and can run stably on various mainstream browsers and devices, ensuring that your page can be displayed smoothly in any environment, providing users with a high-quality browsing experience. At the same time, its efficient rendering mechanism can quickly process large amounts of data, even in the face of complex page structures and rich content, it can easily cope without pressure.
+
+We sincerely invite all users to visit our [official website](https://i-simple.fun/) Experience firsthand the amazing features brought by the new solution and witness the wonderful moments of zero programming to achieve page miracles together.
+
+Once again, we deeply apologize for any inconvenience caused to everyone. We sincerely hope that everyone can understand our decision and look forward to the new solution bringing more convenience and surprises to your project development.
+Thank you all for your continuous support and kindness towards us!
+
+-- 小火球
+```
 ## Document
 [EN](https://github.com/alan1111/json2html-react/blob/main/README.md)｜[CN](https://github.com/alan1111/json2html-react/blob/main/README_CN.md)
 
@@ -135,7 +158,4 @@ pnpm dev
 
 ## Any other problems?
 
-Welcome to scan the QR code below, you can leave any questions you want to know.
-
-<img width="200" src="./author.png" />
-
+[Welcome to contact me](https://i-simple.fun/contactUs)

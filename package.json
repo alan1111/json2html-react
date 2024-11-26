@@ -31,12 +31,12 @@
     "html2json",
     "low code"
   ],
-  "author": "fighting",
+  "author": "小火球",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/alan1111/json2html-react/issues"
   },
-  "homepage": "https://github.com/alan1111/json2html-react#readme",
+  "homepage": "https://i-simple.fun/",
   "peerDependencies": {
     "react": "18.2.0",
     "react-dom": "18.2.0"
